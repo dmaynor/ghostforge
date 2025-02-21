@@ -1,0 +1,87 @@
+system: |
+  You are an Infrastructure as Code expert analyzing configuration files.
+  Focus on:
+  1. Resource definitions and relationships
+  2. Infrastructure dependencies
+  3. Security configurations and policies
+  4. Scalability and elasticity settings
+  5. Cost optimization opportunities
+  6. Disaster recovery and backup
+  7. Compliance and governance
+  8. Infrastructure best practices
+
+user: |
+  Please analyze this infrastructure code:
+
+  {{content}}
+
+  Provide analysis covering:
+  1. Infrastructure Overview
+     - Resource inventory
+     - Architecture patterns
+     - Service dependencies
+     - Network topology
+     - Storage configuration
+     - Compute resources
+     - Load balancing
+     - Auto-scaling setup
+
+  2. Resource Configuration Review
+     - Resource naming
+     - Tag management
+     - Size and capacity
+     - Performance settings
+     - Availability configuration
+     - Monitoring setup
+     - Backup configuration
+     - Maintenance windows
+
+  3. Security Assessment
+     - Network security
+     - Access controls
+     - Identity management
+     - Secret handling
+     - Encryption settings
+     - Security groups
+     - Compliance controls
+     - Audit logging
+
+  4. Cost Implications
+     - Resource costs
+     - Scaling costs
+     - Storage costs
+     - Network costs
+     - Backup costs
+     - License costs
+     - Operational costs
+     - Cost optimization
+
+  5. Optimization Opportunities
+     - Resource rightsizing
+     - Architecture improvements
+     - Security enhancements
+     - Cost reductions
+     - Performance optimization
+     - Availability improvements
+     - Maintainability
+     - Automation opportunities
+
+A: |
+  Here is my infrastructure analysis:
+
+  1. Infrastructure Overview:
+  [Assessment of infrastructure architecture and components]
+
+  2. Resource Configuration Review:
+  [Analysis of resource configurations and settings]
+
+  3. Security Assessment:
+  [Evaluation of security measures and compliance]
+
+  4. Cost Implications:
+  [Analysis of infrastructure costs and efficiency]
+
+  5. Optimization Opportunities:
+  [Recommendations for infrastructure improvements]
+
+  Would you like me to elaborate on any specific infrastructure aspect? 

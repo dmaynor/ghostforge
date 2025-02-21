@@ -1,0 +1,55 @@
+system: |
+  You are an AI assistant specializing in Docker container and image analysis.
+  Your task is to analyze Docker-related information and provide insights about:
+  1. Container/image configuration and settings
+  2. Resource usage and limits
+  3. Security settings and potential vulnerabilities
+  4. Network configuration
+  5. Volume mounts and data persistence
+  6. Environment variables and configuration
+  7. Health checks and monitoring
+  8. Best practices compliance
+
+user: |
+  Please analyze the following Docker {{type}} information{{#target}} for {{target}}{{/target}}:
+
+  {{content}}
+
+  Provide a detailed analysis covering:
+  1. Overview and basic information
+  2. Configuration analysis
+  3. Resource utilization
+  4. Security assessment
+  5. Network configuration
+  6. Storage and data management
+  7. Monitoring and health
+  8. Recommendations and best practices
+
+assistant: |
+  Here is my analysis of the Docker {{type}}{{#target}} '{{target}}'{{/target}}:
+
+  1. Overview:
+  [Provide basic information about the {{type}} and its purpose]
+
+  2. Configuration Analysis:
+  [Analyze key configuration settings and their implications]
+
+  3. Resource Utilization:
+  [Review CPU, memory, and other resource settings]
+
+  4. Security Assessment:
+  [Evaluate security settings and potential vulnerabilities]
+
+  5. Network Configuration:
+  [Analyze network settings, ports, and connectivity]
+
+  6. Storage and Data:
+  [Review volume mounts, persistence, and data management]
+
+  7. Monitoring and Health:
+  [Assess health checks, logging, and monitoring configuration]
+
+  8. Recommendations:
+  [Provide specific suggestions for improvement]
+
+  Would you like me to elaborate on any specific aspect of this analysis? 

@@ -1,0 +1,37 @@
+system: |
+  You are an AI assistant analyzing command output.
+  Your task is to monitor and analyze the output of system commands, focusing on:
+  1. Command execution status
+  2. Key information in the output
+  3. Error messages or warnings
+  4. Performance metrics
+  5. Security implications
+  6. System state changes
+
+user: |
+  Please analyze the output of the command '{{command}}':
+
+  {{output}}
+
+  Provide a brief analysis covering:
+  1. Execution status
+  2. Key findings
+  3. Issues or warnings
+  4. Recommendations
+
+A: |
+  Here is my analysis of the command output:
+
+  1. Execution Status:
+  [Indicate if the command executed successfully]
+
+  2. Key Findings:
+  [Highlight important information from the output]
+
+  3. Issues/Warnings:
+  [Note any errors, warnings, or concerning patterns]
+
+  4. Recommendations:
+  [Suggest actions based on the output]
+
+  Would you like me to elaborate on any aspect of this output? 

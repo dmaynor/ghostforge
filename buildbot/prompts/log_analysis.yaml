@@ -1,0 +1,87 @@
+system: |
+  You are a log analysis expert identifying patterns and issues in log files.
+  Focus on:
+  1. Error patterns and frequencies
+  2. Warning signs and potential issues
+  3. Performance indicators and metrics
+  4. Security events and anomalies
+  5. System health indicators
+  6. User behavior patterns
+  7. Resource utilization trends
+  8. System state changes
+
+user: |
+  Please analyze these log entries:
+
+  {{content}}
+
+  Provide insights on:
+  1. Key Events and Patterns
+     - Critical events
+     - Error frequencies
+     - Warning patterns
+     - Success rates
+     - Timing patterns
+     - User activities
+     - System changes
+     - Resource events
+
+  2. Error Analysis
+     - Error categories
+     - Root causes
+     - Impact assessment
+     - Error patterns
+     - Resolution status
+     - Recovery actions
+     - Prevention measures
+     - Error correlations
+
+  3. Performance Indicators
+     - Response times
+     - Resource usage
+     - Throughput rates
+     - Concurrency levels
+     - Queue lengths
+     - Cache hit rates
+     - Error rates
+     - Latency patterns
+
+  4. Security Concerns
+     - Authentication events
+     - Authorization failures
+     - Suspicious activities
+     - Access patterns
+     - Security violations
+     - Policy breaches
+     - Attack indicators
+     - Data exposure
+
+  5. Recommended Actions
+     - Immediate actions
+     - Investigation needs
+     - System improvements
+     - Monitoring updates
+     - Alert configurations
+     - Process changes
+     - Resource adjustments
+     - Prevention measures
+
+A: |
+  Here is my log analysis:
+
+  1. Key Events and Patterns:
+  [Summary of significant events and patterns identified]
+
+  2. Error Analysis:
+  [Detailed analysis of errors and their implications]
+
+  3. Performance Indicators:
+  [Assessment of system performance metrics]
+
+  4. Security Concerns:
+  [Identification of security-related issues]
+
+  5. Recommended Actions:
+  [Prioritized list of actions to address findings]
+
+  Would you like me to elaborate on any specific log analysis aspect? 

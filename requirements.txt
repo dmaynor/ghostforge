@@ -1,0 +1,19 @@
+# Core dependencies
+PyYAML>=6.0.1
+Jinja2>=3.1.2
+requests>=2.31.0
+llama-cpp-python>=0.2.11
+
+# Docker support
+docker>=7.0.0
+paramiko>=3.4.0
+
+# Kubernetes support
+kubernetes>=29.0.0
+kubernetes-validate>=1.28.0
+
+# Development dependencies
+black>=23.12.1  # Code formatting
+pylint>=3.0.3   # Code linting
+pytest>=7.4.3   # Testing
+pytest-cov>=4.1.0  # Test coverage

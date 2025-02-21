@@ -1,0 +1,41 @@
+patterns:
+  "test_*.py":
+    name: "Python tests"
+    category: "Python"
+    type: "glob"
+  "*_test.py":
+    name: "Python tests"
+    category: "Python"
+    type: "glob"
+  "pytest.ini":
+    name: "pytest"
+    category: "Python"
+    type: "file"
+  "jest.config.js":
+    name: "Jest"
+    category: "JavaScript"
+    type: "file"
+  "karma.conf.js":
+    name: "Karma"
+    category: "JavaScript"
+    type: "file"
+  "phpunit.xml":
+    name: "PHPUnit"
+    category: "PHP"
+    type: "file"
+  "test/":
+    name: "Test directory"
+    category: "Generic"
+    type: "directory"
+  "tests/":
+    name: "Test directory"
+    category: "Generic"
+    type: "directory"
+  "__tests__/":
+    name: "Jest tests directory"
+    category: "JavaScript"
+    type: "directory"
+  "spec/":
+    name: "RSpec directory"
+    category: "Ruby"
+    type: "directory" 

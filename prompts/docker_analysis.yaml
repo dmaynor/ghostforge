@@ -1,0 +1,41 @@
+description: Template for analyzing Docker configurations and issues
+template: |
+  Analyze this Docker configuration or output and provide detailed insights:
+
+  {{ content }}
+
+  Please provide a comprehensive analysis covering:
+
+  1. Configuration Overview:
+     - Base image selection
+     - Build stages and optimization
+     - Service dependencies
+     - Network setup
+
+  2. Security Assessment:
+     - Permission and privilege settings
+     - Exposed ports
+     - Volume mounts
+     - Environment variables
+     - Known vulnerabilities in configuration
+
+  3. Performance Optimization:
+     - Image size and layer optimization
+     - Cache utilization
+     - Resource allocation
+     - Startup dependencies
+
+  4. Best Practices Review:
+     - Dockerfile best practices compliance
+     - Docker Compose best practices (if applicable)
+     - Industry standard alignment
+     - Documentation completeness
+
+  5. Recommendations:
+     - Security improvements
+     - Performance optimizations
+     - Resource management suggestions
+     - Monitoring and logging recommendations
+
+  Format your response in a clear, structured manner with sections for each point above.
+  Highlight critical issues or recommendations that require immediate attention. 

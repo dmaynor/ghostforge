@@ -1,0 +1,54 @@
+patterns:
+  ".env":
+    name: "Environment variables"
+    category: "Environment"
+    type: "file"
+    sensitive: true
+  ".env.example":
+    name: "Environment template"
+    category: "Environment"
+    type: "file"
+  "config.yaml":
+    name: "YAML configuration"
+    category: "YAML"
+    type: "file"
+  "config.yml":
+    name: "YAML configuration"
+    category: "YAML"
+    type: "file"
+  "config.json":
+    name: "JSON configuration"
+    category: "JSON"
+    type: "file"
+  "config.toml":
+    name: "TOML configuration"
+    category: "TOML"
+    type: "file"
+  ".editorconfig":
+    name: "EditorConfig"
+    category: "Editor"
+    type: "file"
+  "tox.ini":
+    name: "Tox configuration"
+    category: "Python"
+    type: "file"
+  ".pre-commit-config.yaml":
+    name: "pre-commit hooks"
+    category: "Git"
+    type: "file"
+  ".gitignore":
+    name: "Git ignore rules"
+    category: "Git"
+    type: "file"
+  ".dockerignore":
+    name: "Docker ignore rules"
+    category: "Docker"
+    type: "file"
+  "docker-compose.yml":
+    name: "Docker Compose"
+    category: "Docker"
+    type: "file"
+  "kubernetes/":
+    name: "Kubernetes configs"
+    category: "Kubernetes"
+    type: "directory" 

@@ -1,0 +1,13 @@
+description: Default template for analyzing error logs and stack traces
+template: |
+  Analyze the following error log or stack trace and provide insights:
+
+  {{ content }}
+
+  Please provide:
+  1. Error Type and Summary
+  2. Root Cause Analysis
+  3. Potential Solutions
+  4. Prevention Recommendations
+
+  Format your response in a clear, structured manner with sections for each point above. 

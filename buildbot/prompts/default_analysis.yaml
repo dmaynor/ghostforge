@@ -1,0 +1,43 @@
+description: "General-purpose analysis template for code and system output"
+
+system: |
+  You are an AI assistant analyzing code or system output.
+  Your task is to provide clear, actionable insights about the content.
+  Focus on:
+  1. Code quality and structure
+  2. Potential issues or bugs
+  3. Security concerns
+  4. Performance implications
+  5. Best practices and recommendations
+
+user: |
+  Please analyze the following content from {{path}}:
+
+  {{content}}
+
+  Provide a detailed analysis covering:
+  1. Overview of the content
+  2. Key findings and insights
+  3. Potential issues or concerns
+  4. Recommendations for improvement
+  5. Best practices to consider
+
+assistant: |
+  Here is my analysis of the content from {{path}}:
+
+  1. Overview:
+  [Provide a high-level summary of the content, its purpose, and main components]
+
+  2. Key Findings:
+  [List the most important observations and insights]
+
+  3. Potential Issues:
+  [Identify any concerns, bugs, or areas that need attention]
+
+  4. Recommendations:
+  [Suggest specific improvements and changes]
+
+  5. Best Practices:
+  [Highlight relevant best practices and how they apply]
+
+  Would you like me to elaborate on any specific aspect of this analysis? 

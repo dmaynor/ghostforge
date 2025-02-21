@@ -1,0 +1,37 @@
+patterns:
+  ".github/workflows/":
+    name: "GitHub Actions"
+    category: "GitHub"
+    type: "directory"
+  ".gitlab-ci.yml":
+    name: "GitLab CI"
+    category: "GitLab"
+    type: "file"
+  "Jenkinsfile":
+    name: "Jenkins"
+    category: "Jenkins"
+    type: "file"
+  ".travis.yml":
+    name: "Travis CI"
+    category: "Travis"
+    type: "file"
+  "azure-pipelines.yml":
+    name: "Azure Pipelines"
+    category: "Azure"
+    type: "file"
+  ".circleci/":
+    name: "CircleCI"
+    category: "CircleCI"
+    type: "directory"
+  "bitbucket-pipelines.yml":
+    name: "Bitbucket Pipelines"
+    category: "Bitbucket"
+    type: "file"
+  ".drone.yml":
+    name: "Drone CI"
+    category: "Drone"
+    type: "file"
+  "cloudbuild.yaml":
+    name: "Google Cloud Build"
+    category: "Google Cloud"
+    type: "file" 

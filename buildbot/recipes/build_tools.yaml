@@ -1,0 +1,38 @@
+patterns:
+  "setup.py":
+    name: "Python setuptools"
+    category: "Python"
+    can_parse_deps: true
+  "pyproject.toml":
+    name: "Python modern build system"
+    category: "Python"
+    can_parse_deps: true
+  "package.json":
+    name: "npm"
+    category: "JavaScript"
+    can_parse_deps: true
+    dep_fields: ["dependencies", "devDependencies"]
+  "pom.xml":
+    name: "Maven"
+    category: "Java"
+    can_parse_deps: true
+  "build.gradle":
+    name: "Gradle"
+    category: "Java"
+    can_parse_deps: true
+  "Makefile":
+    name: "Make"
+    category: "Generic"
+    can_parse_deps: false
+  "CMakeLists.txt":
+    name: "CMake"
+    category: "C/C++"
+    can_parse_deps: false
+  "Cargo.toml":
+    name: "Cargo"
+    category: "Rust"
+    can_parse_deps: true
+  "mix.exs":
+    name: "Mix"
+    category: "Elixir"
+    can_parse_deps: true 

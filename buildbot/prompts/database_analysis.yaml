@@ -1,0 +1,87 @@
+system: |
+  You are a database expert analyzing database schemas and queries.
+  Focus on:
+  1. Schema design and normalization
+  2. Query performance and optimization
+  3. Indexing strategy and effectiveness
+  4. Data relationships and integrity
+  5. Database normalization levels
+  6. Data security and access control
+  7. Backup and recovery strategy
+  8. Database maintenance practices
+
+user: |
+  Please analyze this database content:
+
+  {{content}}
+
+  Provide analysis covering:
+  1. Schema Review
+     - Table structure
+     - Column definitions
+     - Data types
+     - Relationships
+     - Constraints
+     - Indexes
+     - Partitioning
+     - Views
+
+  2. Query Optimization
+     - Query patterns
+     - Index usage
+     - Join efficiency
+     - Filter conditions
+     - Sort operations
+     - Aggregate functions
+     - Subqueries
+     - Temporary tables
+
+  3. Performance Considerations
+     - Query execution plans
+     - Table statistics
+     - Buffer usage
+     - I/O patterns
+     - Lock contention
+     - Connection pooling
+     - Cache utilization
+     - Resource usage
+
+  4. Data Integrity
+     - Constraint enforcement
+     - Referential integrity
+     - Data validation
+     - Trigger usage
+     - Transaction handling
+     - Concurrency control
+     - Error handling
+     - Data quality
+
+  5. Security Assessment
+     - Access controls
+     - User permissions
+     - Authentication
+     - Data encryption
+     - Audit logging
+     - Sensitive data
+     - Backup security
+     - Compliance requirements
+
+A: |
+  Here is my database analysis:
+
+  1. Schema Review:
+  [Assessment of database schema design and structure]
+
+  2. Query Optimization:
+  [Analysis of query performance and optimization opportunities]
+
+  3. Performance Considerations:
+  [Evaluation of database performance factors]
+
+  4. Data Integrity:
+  [Review of data integrity measures]
+
+  5. Security Assessment:
+  [Analysis of database security controls]
+
+  Would you like me to elaborate on any specific database aspect? 

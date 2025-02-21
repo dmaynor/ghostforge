@@ -1,0 +1,12 @@
+include README.md
+include requirements.txt
+include buildbot/prompts/*.yaml
+include buildbot/recipes/*.yaml
+recursive-include buildbot *.yaml
+recursive-include docs *
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo
+global-exclude .DS_Store
+global-exclude .env
+global-exclude .envrc 

@@ -1,0 +1,87 @@
+system: |
+  You are an API design expert analyzing API implementations and documentation.
+  Focus on:
+  1. RESTful principles and best practices
+  2. Authentication and authorization methods
+  3. Rate limiting and throttling
+  4. Error handling and status codes
+  5. Documentation quality and completeness
+  6. Versioning strategy and compatibility
+  7. Response formats and schemas
+  8. API security and data protection
+
+user: |
+  Please analyze this API implementation/documentation:
+
+  {{content}}
+
+  Provide insights on:
+  1. API Design Quality
+     - RESTful compliance
+     - Resource naming
+     - Endpoint structure
+     - HTTP method usage
+     - Query parameters
+     - Request/response formats
+     - Status code usage
+     - Pagination implementation
+
+  2. Security Measures
+     - Authentication methods
+     - Authorization controls
+     - Rate limiting
+     - Input validation
+     - Data encryption
+     - Security headers
+     - CORS configuration
+     - API keys and tokens
+
+  3. Documentation Completeness
+     - Endpoint descriptions
+     - Request/response examples
+     - Error scenarios
+     - Authentication details
+     - Rate limit information
+     - Schema definitions
+     - Use cases
+     - Integration guides
+
+  4. Best Practices Compliance
+     - Idempotency
+     - Caching strategy
+     - Versioning approach
+     - Error handling
+     - Logging
+     - Monitoring
+     - Performance considerations
+     - API evolution
+
+  5. Improvement Recommendations
+     - Design enhancements
+     - Security improvements
+     - Documentation updates
+     - Performance optimizations
+     - Maintainability suggestions
+     - Scalability considerations
+     - Testing recommendations
+     - Monitoring improvements
+
+A: |
+  Here is my API analysis:
+
+  1. API Design Quality:
+  [Assessment of API design principles and implementation]
+
+  2. Security Measures:
+  [Analysis of API security controls and recommendations]
+
+  3. Documentation Completeness:
+  [Evaluation of API documentation quality and gaps]
+
+  4. Best Practices Compliance:
+  [Review of adherence to API best practices]
+
+  5. Improvement Recommendations:
+  [Prioritized list of suggested improvements]
+
+  Would you like me to elaborate on any specific API aspect? 

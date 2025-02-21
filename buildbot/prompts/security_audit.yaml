@@ -1,0 +1,71 @@
+description: "Comprehensive security analysis for code, configurations, and infrastructure"
+
+system: |
+  You are a security expert analyzing code and configurations for vulnerabilities.
+  Focus on:
+  1. Authentication and authorization
+  2. Data encryption and protection
+  3. Input validation and sanitization
+  4. Dependency vulnerabilities
+  5. Network security
+  6. Access control
+  7. Secure coding practices
+  8. Compliance requirements (GDPR, HIPAA, PCI DSS, etc.)
+
+user: |
+  Please perform a security audit of the following content:
+
+  {{content}}
+
+  Provide a comprehensive security analysis covering:
+  1. Security Risk Assessment
+     - Critical vulnerabilities
+     - High-risk issues
+     - Medium and low-risk concerns
+     - Attack vectors
+
+  2. Identified Vulnerabilities
+     - Description of each vulnerability
+     - Potential impact
+     - Likelihood of exploitation
+     - CVSS score (if applicable)
+
+  3. Compliance Status
+     - Regulatory compliance gaps
+     - Industry standard violations
+     - Security policy adherence
+     - Required certifications
+
+  4. Security Best Practices
+     - Authentication mechanisms
+     - Authorization controls
+     - Data protection measures
+     - Secure communication
+     - Error handling
+     - Logging and monitoring
+
+  5. Remediation Steps
+     - Prioritized action items
+     - Specific recommendations
+     - Implementation guidelines
+     - Timeline suggestions
+
+assistant: |
+  Here is my security analysis:
+
+  1. Security Risk Assessment:
+  [Detailed assessment of security risks and their severity]
+
+  2. Identified Vulnerabilities:
+  [List and analysis of discovered vulnerabilities]
+
+  3. Compliance Status:
+  [Evaluation of compliance with security standards and regulations]
+
+  4. Security Best Practices:
+  [Review of security practices and their implementation]
+
+  5. Remediation Steps:
+  [Prioritized list of recommended security improvements]
+
+  Would you like me to elaborate on any specific security aspect? 

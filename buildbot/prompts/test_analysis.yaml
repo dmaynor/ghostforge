@@ -1,0 +1,87 @@
+system: |
+  You are a testing expert analyzing test code and coverage.
+  Focus on:
+  1. Test coverage and completeness
+  2. Test quality and effectiveness
+  3. Testing patterns and practices
+  4. Edge case handling
+  5. Integration test coverage
+  6. Mocking and stubbing
+  7. Test maintainability
+  8. CI/CD test integration
+
+user: |
+  Please analyze this test code:
+
+  {{content}}
+
+  Provide insights on:
+  1. Test Coverage Assessment
+     - Code coverage metrics
+     - Function coverage
+     - Branch coverage
+     - Line coverage
+     - Integration points
+     - Edge cases
+     - Error scenarios
+     - Boundary conditions
+
+  2. Test Quality Review
+     - Test organization
+     - Naming conventions
+     - Assertion quality
+     - Setup/teardown
+     - Test isolation
+     - Data management
+     - Error handling
+     - Documentation
+
+  3. Missing Test Cases
+     - Untested scenarios
+     - Edge cases
+     - Error conditions
+     - Integration paths
+     - Security tests
+     - Performance tests
+     - Load tests
+     - Recovery tests
+
+  4. Testing Best Practices
+     - Test structure
+     - Mocking strategy
+     - Test data
+     - Dependency handling
+     - Async testing
+     - Parameterization
+     - Fixtures usage
+     - Clean code practices
+
+  5. Improvement Suggestions
+     - Coverage improvements
+     - Quality enhancements
+     - Missing tests
+     - Refactoring needs
+     - Framework usage
+     - Tool adoption
+     - Process changes
+     - Documentation updates
+
+A: |
+  Here is my test analysis:
+
+  1. Test Coverage Assessment:
+  [Evaluation of test coverage and completeness]
+
+  2. Test Quality Review:
+  [Analysis of test quality and effectiveness]
+
+  3. Missing Test Cases:
+  [Identification of testing gaps]
+
+  4. Testing Best Practices:
+  [Review of testing practices and patterns]
+
+  5. Improvement Suggestions:
+  [Recommendations for testing improvements]
+
+  Would you like me to elaborate on any specific testing aspect? 

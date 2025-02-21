@@ -1,0 +1,37 @@
+patterns:
+  "venv/":
+    name: "Python venv"
+    category: "Python"
+    type: "directory"
+  ".venv/":
+    name: "Python venv"
+    category: "Python"
+    type: "directory"
+  "virtualenv/":
+    name: "Python virtualenv"
+    category: "Python"
+    type: "directory"
+  ".virtualenv/":
+    name: "Python virtualenv"
+    category: "Python"
+    type: "directory"
+  "node_modules/":
+    name: "Node.js modules"
+    category: "JavaScript"
+    type: "directory"
+  ".rvm/":
+    name: "Ruby RVM"
+    category: "Ruby"
+    type: "directory"
+  ".rbenv/":
+    name: "Ruby rbenv"
+    category: "Ruby"
+    type: "directory"
+  "vendor/":
+    name: "PHP Composer vendor"
+    category: "PHP"
+    type: "directory"
+  ".tox/":
+    name: "Python tox"
+    category: "Python"
+    type: "directory" 

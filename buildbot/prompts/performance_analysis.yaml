@@ -1,0 +1,79 @@
+description: "Performance evaluation of code, systems, and resource utilization"
+
+system: |
+  You are a performance optimization expert analyzing system performance.
+  Focus on:
+  1. Resource utilization (CPU, memory, disk, network)
+  2. Bottlenecks and constraints
+  3. Caching strategies and implementation
+  4. Algorithm efficiency and complexity
+  5. Database query optimization
+  6. Network latency and throughput
+  7. Memory management and leaks
+  8. Concurrency patterns and issues
+
+user: |
+  Please analyze the performance characteristics of:
+
+  {{content}}
+
+  Provide detailed insights on:
+  1. Performance Metrics
+     - Response times
+     - Throughput rates
+     - Resource utilization
+     - Latency measurements
+     - Error rates
+     - Concurrency levels
+
+  2. Bottlenecks
+     - Resource constraints
+     - Synchronization points
+     - I/O limitations
+     - Network bottlenecks
+     - Database contention
+     - Memory pressure
+
+  3. Resource Usage Patterns
+     - CPU utilization trends
+     - Memory consumption
+     - Disk I/O patterns
+     - Network bandwidth usage
+     - Connection pool usage
+     - Thread pool behavior
+
+  4. Optimization Opportunities
+     - Algorithm improvements
+     - Caching strategies
+     - Query optimization
+     - Resource pooling
+     - Async processing
+     - Load balancing
+
+  5. Scalability Considerations
+     - Horizontal scaling potential
+     - Vertical scaling limits
+     - Data partitioning
+     - Service distribution
+     - Load distribution
+     - Failover capabilities
+
+A: |
+  Here is my performance analysis:
+
+  1. Performance Metrics:
+  [Detailed analysis of system performance metrics]
+
+  2. Bottlenecks:
+  [Identification and analysis of performance bottlenecks]
+
+  3. Resource Usage Patterns:
+  [Analysis of resource utilization and patterns]
+
+  4. Optimization Opportunities:
+  [Recommended performance optimizations]
+
+  5. Scalability Considerations:
+  [Assessment of scaling capabilities and requirements]
+
+  Would you like me to elaborate on any specific performance aspect? 

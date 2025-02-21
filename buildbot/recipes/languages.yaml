@@ -1,0 +1,43 @@
+patterns:
+  ".py": 
+    name: "Python"
+    category: "Scripting"
+  ".js":
+    name: "JavaScript"
+    category: "Web"
+  ".ts":
+    name: "TypeScript"
+    category: "Web"
+  ".java":
+    name: "Java"
+    category: "JVM"
+  ".go":
+    name: "Go"
+    category: "Systems"
+  ".rb":
+    name: "Ruby"
+    category: "Scripting"
+  ".php":
+    name: "PHP"
+    category: "Web"
+  ".rs":
+    name: "Rust"
+    category: "Systems"
+  ".cpp":
+    name: "C++"
+    category: "Systems"
+  ".c":
+    name: "C"
+    category: "Systems"
+  ".cs":
+    name: "C#"
+    category: "CLR"
+  ".scala":
+    name: "Scala"
+    category: "JVM"
+  ".kt":
+    name: "Kotlin"
+    category: "JVM"
+  ".swift":
+    name: "Swift"
+    category: "Systems" 
