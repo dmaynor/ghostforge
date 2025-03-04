@@ -304,5 +304,5 @@ class BuildBotShell(cmd.Cmd):
     from .commands import (
         do_exit, do_index, do_search, do_analyze, do_prompt,
         do_config, do_docker, do_history, do_watch, do_unwatch,
-        do_watches, do_help, do_model
+        do_watches, do_help, do_model, do_prompts
     ) 

@@ -347,6 +347,18 @@ def do_watches(self, _):
         watch_type, target = watch_id.split(":", 1)
         print(f"  {watch_type}: {target}")
 
+def get_command_categories(self):
+    """Get all commands organized by category."""
+    # Return a dictionary of command categories
+    return {
+        "Core Commands": ["help", "exit"],
+        "File Operations": ["index", "search", "analyze"],
+        "Configuration": ["config", "prompt", "model", "prompts"],
+        "Monitoring": ["watch", "unwatch", "watches"],
+        "Analysis": ["docker", "analyze", "detect"],
+        "History": ["history"]
+    }
+
 def do_help(self, arg):
     """Show help about commands.
     Usage: help [command]
