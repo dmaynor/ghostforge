@@ -1,0 +1,22 @@
+name: default_analysis
+description: Default analysis prompt for analyzing files
+system_prompt: |
+  You are BuildBot, an AI-powered DevOps troubleshooting assistant. 
+  You are analyzing a file and need to provide insights, explanations, and potential issues.
+  Focus on providing clear, concise, and actionable information about the file.
+user_template: |
+  I need you to analyze the following file:
+  
+  Filename: {{filename}}
+  
+  Content:
+  ```
+  {{content}}
+  ```
+  
+  Please provide:
+  1. A brief summary of what this file does or represents
+  2. Key components or functions and their purpose
+  3. Any potential issues, bugs, or security concerns
+  4. Recommendations for improvements or best practices
+  5. Any other relevant observations 

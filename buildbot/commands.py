@@ -41,6 +41,12 @@ def do_index(self, arg):
             
             file_path = os.path.join(root, file)
             try:
+                # First try to open the file to check if it's readable
+                with open(file_path, "rb") as f:
+                    # Try to read a small portion to verify it's accessible
+                    f.read(1)
+                
+                # If readable, now try to read as text with UTF-8 encoding
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
                 last_modified = os.path.getmtime(file_path)
@@ -50,7 +56,8 @@ def do_index(self, arg):
                     (file_path, content, last_modified)
                 )
             except Exception as e:
-                print(f"[BuildBot]: Error indexing '{file_path}': {e}")
+                # More graceful error handling
+                print(f"[BuildBot]: {file_path} will not be indexed.")
     
     self.db_conn.commit()
     print("[BuildBot]: Indexing complete.")

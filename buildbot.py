@@ -46,18 +46,34 @@ import threading
 import shlex
 import datetime
 from jinja2 import Template
+import fnmatch
+from pathlib import Path
 
 # Load environment variables with defaults
 MODEL_URL = os.getenv("BUILDBOT_MODEL_URL", "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-GGUF/resolve/main/tinyllama-1.1b-chat.Q4_K_M.gguf")
-MODEL_DIR = os.getenv("BUILDBOT_MODEL_DIR", "./models")
+MODEL_DIR = os.getenv("BUILDBOT_MODEL_DIR", os.path.expanduser("~/.buildbot/models"))
 MODEL_PATH = os.path.join(MODEL_DIR, "tinyllama-1.1b-chat.Q4_K_M.gguf")
 PROMPT_DIR = os.getenv("BUILDBOT_PROMPT_DIR", "./prompts")
-CONFIG_DIR = os.getenv("BUILDBOT_CONFIG_DIR", ".buildbot")
+CONFIG_DIR = os.getenv("BUILDBOT_CONFIG_DIR", os.path.expanduser("~/.buildbot"))
 
 # Ensure the directories exist
 os.makedirs(PROMPT_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(CONFIG_DIR, exist_ok=True)
+
+# Load configuration
+CONFIG_PATH = os.path.join(CONFIG_DIR, "config.yaml")
+if os.path.exists(CONFIG_PATH):
+    with open(CONFIG_PATH, 'r') as f:
+        config = yaml.safe_load(f) or {}
+else:
+    config = {}
+
+exclude_patterns = config.get('indexing', {}).get('exclude_patterns', [])
+
+def should_exclude(filepath):
+    path = Path(filepath)
+    return any(path.match(pattern) for pattern in exclude_patterns)
 
 # Check for missing dependencies
 def check_dependency(module_name):
@@ -165,15 +181,24 @@ class BuildBotShell(cmd.Cmd):
         cursor = self.db_conn.cursor()
         for root, _, files in os.walk("."):
             for file in files:
+                filepath = os.path.join(root, file)
+                if should_exclude(filepath):
+                    continue  # Skip excluded files
                 if file.endswith((".log", ".yaml", ".yml", ".json", ".py", ".sh", "Dockerfile")):
-                    path = os.path.join(root, file)
-                    last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(path))
+                    last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
                     try:
-                        with open(path, "r", errors="ignore") as f:
+                        # First try to open the file to check if it's readable
+                        with open(filepath, "rb") as f:
+                            # Try to read a small portion to verify it's accessible
+                            f.read(1)
+                        
+                        # If readable, now try to read as text
+                        with open(filepath, "r", errors="ignore") as f:
                             content = f.read()
-                        cursor.execute("INSERT OR REPLACE INTO files (path, content, last_modified) VALUES (?, ?, ?)", (path, content, last_modified))
+                        cursor.execute("INSERT OR REPLACE INTO files (path, content, last_modified) VALUES (?, ?, ?)", (filepath, content, last_modified))
                     except Exception as e:
-                        print(f"[BuildBot]: Skipping {path} due to error: {e}")
+                        # More graceful error handling
+                        print(f"[BuildBot]: {filepath} will not be indexed.")
         self.db_conn.commit()
         print("[BuildBot]: Indexing complete!")
 
@@ -379,7 +404,7 @@ template: |
 
             # Save configuration
             try:
-                with open(os.path.join(CONFIG_DIR, "config.yaml"), "w") as f:
+                with open(CONFIG_PATH, "w") as f:
                     yaml.dump(self.config, f, default_flow_style=False)
                 print(f"[BuildBot]: Updated configuration: {key} = {value}")
             except Exception as e:
@@ -398,7 +423,7 @@ template: |
                 del current[key_parts[-1]]
                 
                 # Save configuration
-                with open(os.path.join(CONFIG_DIR, "config.yaml"), "w") as f:
+                with open(CONFIG_PATH, "w") as f:
                     yaml.dump(self.config, f, default_flow_style=False)
                 print(f"[BuildBot]: Removed configuration key: {key}")
             except KeyError:
@@ -761,7 +786,7 @@ Please provide:
                 self.config["model"]["path"] = model_path
 
                 # Save configuration
-                with open(os.path.join(CONFIG_DIR, "config.yaml"), "w") as f:
+                with open(CONFIG_PATH, "w") as f:
                     yaml.dump(self.config, f, default_flow_style=False)
 
                 # Reload model
@@ -788,6 +813,10 @@ Please provide:
                 print(f"  Model Size: {size:.1f} MB")
             else:
                 print("  Warning: Model file not found!")
+
+    def do_prompts(self, arg):
+        """Alias for prompt command."""
+        self.do_prompt(arg)
 
 # Add WatchThread class at the top level
 class WatchThread(threading.Thread):
