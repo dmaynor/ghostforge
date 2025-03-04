@@ -52,7 +52,7 @@ buildbot
 
 ## Configuration
 
-BuildBot uses several configuration files stored in the `.buildbot` directory:
+BuildBot uses several configuration files stored in the `~/.buildbot` directory:
 
 - `config.yaml`: General configuration
 - `ci.yaml`: CI/CD provider settings
@@ -62,15 +62,15 @@ BuildBot uses several configuration files stored in the `.buildbot` directory:
 Example configuration:
 
 ```yaml
-# .buildbot/config.yaml
+# ~/.buildbot/config.yaml
 model:
-  path: ./models/tinyllama-1.1b-chat.Q4_K_M.gguf
+  path: ~/.buildbot/models/tinyllama-1.1b-chat.Q4_K_M.gguf
   context_size: 2048
   gpu_layers: 0
   threads: 4
   f16_kv: true
 
-# .buildbot/docker.yaml
+# ~/.buildbot/docker.yaml
 docker_hosts:
   prod:
     enabled: true
@@ -86,18 +86,48 @@ docker_hosts:
 
 ## Commands
 
+- `help`: Display help information and available commands
 - `index`: Index project files for troubleshooting
 - `search`: Search indexed files using keywords
 - `analyze`: Analyze files using TinyLlama
 - `prompt`: Manage YAML prompt templates
+- `prompts`: List or view available prompt templates
 - `config`: View or modify BuildBot configuration
 - `docker`: Docker-specific analysis and troubleshooting
 - `history`: View or search command history
 - `watch`: Watch files or command output in real-time
+- `unwatch`: Stop watching a file or command
+- `watches`: List active watches
 - `model`: Manage LLM models
-- `export`: Export analysis results or command output
+- `detect`: Detect and analyze project characteristics
+- `exit`: Exit the BuildBot shell
 
-## Custom Prompts
+## Understanding the Codebase
+
+BuildBot is organized around several key components:
+
+### Shell
+
+The command-line interface is powered by the Python `cmd` module, with command implementations in:
+- `buildbot/shell.py`: Core shell implementation with command categories and completions
+- `buildbot/commands.py`: Individual command implementations 
+
+### File Indexing
+
+The indexing system scans your codebase and stores content for quick retrieval:
+
+```bash
+> index
+```
+
+The indexer will scan your project files and gracefully handle binary files by skipping them with a message:
+
+```
+[BuildBot]: ./.git/index will not be indexed.
+[BuildBot]: ./binary-file.png will not be indexed.
+```
+
+### Custom Prompts
 
 Create custom analysis prompts in YAML format:
 
@@ -137,6 +167,16 @@ black buildbot
 ```bash
 pylint buildbot
 ```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Indexing errors with binary files**: These are expected and won't affect BuildBot's functionality. Binary files are automatically skipped during indexing.
+
+2. **Help command exits the shell**: If you encounter this issue, make sure your installation includes the latest fixes that properly implement the command categories and prompt commands.
+
+3. **Docker/Kubernetes analysis errors**: Ensure you have the proper permissions to access container and cluster information.
 
 ## License
 
