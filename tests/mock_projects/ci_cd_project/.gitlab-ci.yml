@@ -1,0 +1,54 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  # Credentials in CI configuration - security issue
+  DB_PASSWORD: "insecure_db_password"
+  API_KEY: "1234567890abcdef"
+
+# No caching configured
+
+test:
+  stage: test
+  image: python:3.9
+  script:
+    - pip install -r requirements.txt
+    - pip install pytest pytest-cov
+    - pytest --cov=./ --cov-report=xml
+  # No artifacts for test reports
+
+build:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker build -t my-app:$CI_COMMIT_SHORT_SHA .
+    - docker tag my-app:$CI_COMMIT_SHORT_SHA my-registry/my-app:$CI_COMMIT_SHORT_SHA
+    # No authentication to Docker registry
+    - docker push my-registry/my-app:$CI_COMMIT_SHORT_SHA
+  # No rules to limit when this job runs
+
+deploy_staging:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - apk add --no-cache curl
+    # Using curl to make API call with credentials in plain text
+    - curl -X POST "https://staging-api.example.com/deploy" -H "Authorization: Bearer $API_KEY" -d "version=$CI_COMMIT_SHORT_SHA"
+  # No environment defined
+  # No rules to limit when this job runs
+
+deploy_production:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - apk add --no-cache curl
+    # Using curl to make API call with credentials in plain text
+    - curl -X POST "https://api.example.com/deploy" -H "Authorization: Bearer $API_KEY" -d "version=$CI_COMMIT_SHORT_SHA"
+  # No environment defined
+  # No rules to limit when this job runs
+  # No manual approval required
+  # No rollback strategy 

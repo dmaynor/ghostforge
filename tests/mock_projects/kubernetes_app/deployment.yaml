@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: default
+  labels:
+    app: web-app
+spec:
+  # Missing replicas specification - will default to 1 (not highly available)
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      # No resource limits defined - potential resource abuse
+      # No security context - running as root
+      containers:
+      - name: web-app
+        image: my-registry/web-app:latest # Using 'latest' tag - bad practice
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          # Hardcoded credentials - security issue
+          value: "postgresql://user:password@postgres-svc:5432/app"
+        - name: API_KEY
+          value: "1234567890abcdef" # Secret in plain text - security issue
+        # No liveness or readiness probes
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+      volumes:
+      - name: app-logs
+        emptyDir: {} # Using emptyDir - data is lost when pod is deleted 

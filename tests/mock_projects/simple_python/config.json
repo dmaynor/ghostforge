@@ -1,0 +1,22 @@
+{
+  "debug": true,
+  "timeout": 30,
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "username": "user",
+    "password": "insecure_password",
+    "db_name": "test_db"
+  },
+  "api": {
+    "url": "http://localhost:8080",
+    "key": "api_key_12345",
+    "rate_limit": 100
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "app.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  }
+} 

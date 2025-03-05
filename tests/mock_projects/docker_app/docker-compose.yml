@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/app_db
+      - REDIS_URL=redis://redis:6379/0
+      - API_KEY=1234567890abcdef
+      - DEBUG=True
+    # No resource limits defined
+    # No healthcheck defined
+    # No restart policy
+    volumes:
+      - .:/app  # Mount entire directory - security issue
+    # Running as root - security issue
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password  # Password in plain text - security issue
+      - POSTGRES_DB=app_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # No resource limits defined
+    ports:
+      - "5432:5432"  # Exposing database port to host - security issue
+
+  redis:
+    image: redis:6
+    # No password protection - security issue
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"  # Exposing Redis port to host - security issue
+    # No resource limits defined
+
+volumes:
+  postgres_data:
+  redis_data:
+
+# No networks defined - using default bridge
+# No configs or secrets used 

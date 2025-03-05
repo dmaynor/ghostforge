@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+  namespace: default
+  labels:
+    app: web-app
+spec:
+  type: NodePort  # Using NodePort - potential security issue if nodes accessible externally
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30080  # Fixed nodePort - not recommended for prod
+  selector:
+    app: web-app  # Should match the deployment selector 

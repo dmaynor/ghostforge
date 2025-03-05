@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-app-ingress
+  namespace: default
+  annotations:
+    # Missing security annotations - HTTPS redirect, TLS, etc.
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  # No TLS configuration - using HTTP
+  rules:
+  - host: app.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-app-service
+            port:
+              number: 80 
