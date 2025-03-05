@@ -1,4 +1,4 @@
-"""Export functionality for BuildBot."""
+"""Export functionality for GhostForge."""
 
 import json
 import csv
@@ -6,7 +6,7 @@ import datetime
 from typing import List, Dict, Any, Optional
 
 class Exporter:
-    """Base class for BuildBot exporters."""
+    """Base class for GhostForge exporters."""
     
     @staticmethod
     def export(data: List[Dict[str, Any]], format_type: str, output_file: str) -> None:

@@ -1,4 +1,4 @@
-"""BuildBot main entry point."""
+"""GhostForge main entry point."""
 
 import sys
 from .cli import main

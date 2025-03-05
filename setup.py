@@ -1,4 +1,4 @@
-"""BuildBot setup configuration."""
+"""GhostForge setup configuration."""
 
 import os
 from setuptools import setup, find_packages
@@ -20,17 +20,17 @@ dev_requirements = [
 ]
 
 setup(
-    name="buildbot-ai",
+    name="ghostforge-ai",
     version="0.1.0",
     author="David Maynor",
     author_email="dmaynor@gmail.com",
     description="An AI-powered troubleshooting assistant for DevOps",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/dmaynor/buildbot",
+    url="https://github.com/dmaynor/ghostforge",
     project_urls={
-        "Bug Tracker": "https://github.com/dmaynor/buildbot/issues",
-        "Documentation": "https://github.com/dmaynor/buildbot#readme",
+        "Bug Tracker": "https://github.com/dmaynor/ghostforge/issues",
+        "Documentation": "https://github.com/dmaynor/ghostforge#readme",
     },
     packages=find_packages(),
     classifiers=[
@@ -54,12 +54,12 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "buildbot=buildbot.cli:main",
+            "ghostforge=ghostforge.cli:main",
         ],
     },
     include_package_data=True,
     package_data={
-        "buildbot": [
+        "ghostforge": [
             "prompts/*.yaml",
             "recipes/*.yaml",
         ],

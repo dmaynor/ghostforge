@@ -1,9 +1,12 @@
 include README.md
+include ghostforge/prompts/*.yaml
+include ghostforge/recipes/*.yaml
+recursive-include ghostforge *.yaml
 include requirements.txt
-include buildbot/prompts/*.yaml
-include buildbot/recipes/*.yaml
-recursive-include buildbot *.yaml
-recursive-include docs *
+include LICENSE
+include VERSION
+include setup.py
+include .gitignore
 global-exclude *.pyc
 global-exclude __pycache__
 global-exclude *.pyo

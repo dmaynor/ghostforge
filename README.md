@@ -1,4 +1,4 @@
-# BuildBot AI
+# GhostForge AI
 
 An AI-powered troubleshooting assistant for DevOps that integrates with TinyLlama to help analyze and troubleshoot various project files, Docker containers, Kubernetes clusters, and CI/CD pipelines.
 
@@ -17,22 +17,22 @@ An AI-powered troubleshooting assistant for DevOps that integrates with TinyLlam
 ## Installation
 
 ```bash
-pip install buildbot-ai
+pip install ghostforge-ai
 ```
 
 Or install from source:
 
 ```bash
-git clone https://github.com/dmaynor/buildbot.git
-cd buildbot
+git clone https://github.com/dmaynor/ghostforge.git
+cd ghostforge
 pip install -e .
 ```
 
 ## Quick Start
 
-1. Start the BuildBot shell:
+1. Start the GhostForge shell:
 ```bash
-buildbot
+ghostforge
 ```
 
 2. Index your project files:
@@ -52,7 +52,7 @@ buildbot
 
 ## Configuration
 
-BuildBot uses several configuration files stored in the `~/.buildbot` directory:
+GhostForge uses several configuration files stored in the `~/.ghostforge` directory:
 
 - `config.yaml`: General configuration
 - `ci.yaml`: CI/CD provider settings
@@ -62,15 +62,15 @@ BuildBot uses several configuration files stored in the `~/.buildbot` directory:
 Example configuration:
 
 ```yaml
-# ~/.buildbot/config.yaml
+# ~/.ghostforge/config.yaml
 model:
-  path: ~/.buildbot/models/tinyllama-1.1b-chat.Q4_K_M.gguf
+  path: ~/.ghostforge/models/tinyllama-1.1b-chat.Q4_K_M.gguf
   context_size: 2048
   gpu_layers: 0
   threads: 4
   f16_kv: true
 
-# ~/.buildbot/docker.yaml
+# ~/.ghostforge/docker.yaml
 docker_hosts:
   prod:
     enabled: true
@@ -92,7 +92,7 @@ docker_hosts:
 - `analyze`: Analyze files using TinyLlama
 - `prompt`: Manage YAML prompt templates
 - `prompts`: List or view available prompt templates
-- `config`: View or modify BuildBot configuration
+- `config`: View or modify GhostForge configuration
 - `docker`: Docker-specific analysis and troubleshooting
 - `history`: View or search command history
 - `watch`: Watch files or command output in real-time
@@ -100,17 +100,17 @@ docker_hosts:
 - `watches`: List active watches
 - `model`: Manage LLM models
 - `detect`: Detect and analyze project characteristics
-- `exit`: Exit the BuildBot shell
+- `exit`: Exit the GhostForge shell
 
 ## Understanding the Codebase
 
-BuildBot is organized around several key components:
+GhostForge is organized around several key components:
 
 ### Shell
 
 The command-line interface is powered by the Python `cmd` module, with command implementations in:
-- `buildbot/shell.py`: Core shell implementation with command categories and completions
-- `buildbot/commands.py`: Individual command implementations 
+- `ghostforge/shell.py`: Core shell implementation with command categories and completions
+- `ghostforge/commands.py`: Individual command implementations 
 
 ### File Indexing
 
@@ -123,8 +123,8 @@ The indexing system scans your codebase and stores content for quick retrieval:
 The indexer will scan your project files and gracefully handle binary files by skipping them with a message:
 
 ```
-[BuildBot]: ./.git/index will not be indexed.
-[BuildBot]: ./binary-file.png will not be indexed.
+[GhostForge]: ./.git/index will not be indexed.
+[GhostForge]: ./binary-file.png will not be indexed.
 ```
 
 ### Custom Prompts
@@ -160,19 +160,19 @@ pytest
 
 3. Format code:
 ```bash
-black buildbot
+black ghostforge
 ```
 
 4. Run linter:
 ```bash
-pylint buildbot
+pylint ghostforge
 ```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Indexing errors with binary files**: These are expected and won't affect BuildBot's functionality. Binary files are automatically skipped during indexing.
+1. **Indexing errors with binary files**: These are expected and won't affect GhostForge's functionality. Binary files are automatically skipped during indexing.
 
 2. **Help command exits the shell**: If you encounter this issue, make sure your installation includes the latest fixes that properly implement the command categories and prompt commands.
 

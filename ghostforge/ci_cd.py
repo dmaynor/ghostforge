@@ -1,4 +1,4 @@
-"""CI/CD integration for BuildBot."""
+"""CI/CD integration for GhostForge."""
 
 import os
 import yaml

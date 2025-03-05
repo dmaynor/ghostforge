@@ -1,4 +1,4 @@
-"""Kubernetes analysis and management for BuildBot."""
+"""Kubernetes analysis and management for GhostForge."""
 
 import os
 import yaml

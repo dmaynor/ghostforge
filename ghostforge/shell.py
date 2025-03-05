@@ -1,4 +1,4 @@
-"""BuildBot interactive shell."""
+"""GhostForge interactive shell."""
 
 import cmd
 import subprocess
@@ -16,11 +16,11 @@ from jinja2 import Template
 from .utils import load_prompt
 
 # Load environment variables with defaults
-MODEL_URL = os.getenv("BUILDBOT_MODEL_URL", "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-GGUF/resolve/main/tinyllama-1.1b-chat.Q4_K_M.gguf")
-MODEL_DIR = os.getenv("BUILDBOT_MODEL_DIR", os.path.expanduser("~/.buildbot/models"))
+MODEL_URL = os.getenv("GHOSTFORGE_MODEL_URL", "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-GGUF/resolve/main/tinyllama-1.1b-chat.Q4_K_M.gguf")
+MODEL_DIR = os.getenv("GHOSTFORGE_MODEL_DIR", os.path.expanduser("~/.ghostforge/models"))
 MODEL_PATH = os.path.join(MODEL_DIR, "tinyllama-1.1b-chat.Q4_K_M.gguf")
-PROMPT_DIR = os.getenv("BUILDBOT_PROMPT_DIR", os.path.expanduser("~/.buildbot/prompts"))
-CONFIG_DIR = os.getenv("BUILDBOT_CONFIG_DIR", os.path.expanduser("~/.buildbot"))
+PROMPT_DIR = os.getenv("GHOSTFORGE_PROMPT_DIR", os.path.expanduser("~/.ghostforge/prompts"))
+CONFIG_DIR = os.getenv("GHOSTFORGE_CONFIG_DIR", os.path.expanduser("~/.ghostforge"))
 
 # Ensure the directories exist
 os.makedirs(PROMPT_DIR, exist_ok=True)
@@ -30,7 +30,7 @@ os.makedirs(CONFIG_DIR, exist_ok=True)
 def check_dependency(module_name):
     """Check if a Python module is installed."""
     if importlib.util.find_spec(module_name) is None:
-        raise ImportError(f"[BuildBot]: Missing dependency '{module_name}'. Please install it using: pip install {module_name}")
+        raise ImportError(f"[GhostForge]: Missing dependency '{module_name}'. Please install it using: pip install {module_name}")
 
 check_dependency("llama_cpp")
 from llama_cpp import Llama
@@ -43,20 +43,20 @@ def load_prompt(prompt_name, context={}):
             with open(prompt_path, "r") as f:
                 prompt_data = yaml.safe_load(f)
             if not isinstance(prompt_data, dict):
-                print(f"[BuildBot]: Invalid YAML structure in '{prompt_name}.yaml'. Expected a dictionary.")
+                print(f"[GhostForge]: Invalid YAML structure in '{prompt_name}.yaml'. Expected a dictionary.")
                 return None
             template = Template(yaml.dump(prompt_data))
             return template.render(context)
         except yaml.YAMLError as e:
-            print(f"[BuildBot]: Error parsing YAML in '{prompt_name}.yaml': {e}")
+            print(f"[GhostForge]: Error parsing YAML in '{prompt_name}.yaml': {e}")
             return None
     else:
-        print(f"[BuildBot]: Prompt file '{prompt_name}.yaml' not found.")
+        print(f"[GhostForge]: Prompt file '{prompt_name}.yaml' not found.")
         return None
 
-class BuildBotShell(cmd.Cmd):
-    """Interactive REPL for BuildBot."""
-    intro = "BuildBot REPL v1.0\nType 'help' for commands, or press TAB to list all commands."
+class GhostForgeShell(cmd.Cmd):
+    """Interactive REPL for GhostForge."""
+    intro = "GhostForge REPL v1.0\nType 'help' for commands, or press TAB to list all commands."
     prompt = "> "
     history = []  # Stores past commands
     watch_threads = {}  # Stores active watch threads
@@ -72,7 +72,7 @@ class BuildBotShell(cmd.Cmd):
     }
 
     def __init__(self):
-        print("[DEBUG]: Initializing BuildBotShell")
+        print("[DEBUG]: Initializing GhostForgeShell")
         super().__init__()
         self.config = self.load_config()
         self.model = self.load_model()
@@ -100,7 +100,7 @@ class BuildBotShell(cmd.Cmd):
                 with open(os.path.join(CONFIG_DIR, "history.json"), "w") as f:
                     json.dump(self.history, f)
             except Exception as e:
-                print(f"[BuildBot]: Error saving history: {e}")
+                print(f"[GhostForge]: Error saving history: {e}")
         return line
 
     def postcmd(self, stop, line):
@@ -108,13 +108,13 @@ class BuildBotShell(cmd.Cmd):
         return stop
 
     def load_config(self):
-        """Load BuildBot configuration."""
+        """Load GhostForge configuration."""
         print("[DEBUG]: Loading configuration file")
         try:
             with open(os.path.join(CONFIG_DIR, "config.yaml"), "r") as f:
                 return yaml.safe_load(f)
         except FileNotFoundError:
-            print("[BuildBot]: Warning - Config file not found. Using defaults.")
+            print("[GhostForge]: Warning - Config file not found. Using defaults.")
             return {}
 
     def load_model(self):
@@ -152,7 +152,7 @@ class BuildBotShell(cmd.Cmd):
 
     def default(self, line):
         """Handle unknown commands."""
-        print(f"[BuildBot]: Unknown command: {line}")
+        print(f"[GhostForge]: Unknown command: {line}")
         print("Type 'help' for a list of commands or press TAB for command completion.")
 
     def completenames(self, text, *ignored):
@@ -250,7 +250,7 @@ class BuildBotShell(cmd.Cmd):
                 return options
             return [opt for opt in options if opt.startswith(text)]
         elif len(args) == 3 and args[1] == 'switch':
-            model_dir = os.path.expanduser("~/.buildbot/models")
+            model_dir = os.path.expanduser("~/.ghostforge/models")
             if os.path.exists(model_dir):
                 models = [f for f in os.listdir(model_dir) if f.endswith('.gguf')]
                 if not text:
@@ -300,7 +300,7 @@ class BuildBotShell(cmd.Cmd):
 
         super().print_topics(header, cmds, cmdlen, maxcol)
 
-    # Import all the command methods from buildbot.py
+    # Import all the command methods from ghostforge.py
     from .commands import (
         do_exit, do_index, do_search, do_analyze, do_prompt,
         do_config, do_docker, do_history, do_watch, do_unwatch,

@@ -1,19 +1,19 @@
-"""Command-line interface for BuildBot."""
+"""Command-line interface for GhostForge."""
 
 import os
 import sys
 import argparse
-from .shell import BuildBotShell
+from .shell import GhostForgeShell
 
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="BuildBot - An AI-powered troubleshooting assistant"
+        description="GhostForge - An AI-powered troubleshooting assistant"
     )
     parser.add_argument(
         "--config",
         help="Path to configuration directory",
-        default=os.path.expanduser("~/.buildbot")
+        default=os.path.expanduser("~/.ghostforge")
     )
     parser.add_argument(
         "--model",
@@ -39,33 +39,33 @@ def parse_args():
     return parser.parse_args()
 
 def setup_environment(args):
-    """Set up the BuildBot environment."""
+    """Set up the GhostForge environment."""
     # Create config directory if it doesn't exist
     os.makedirs(args.config, exist_ok=True)
 
     # Set environment variables
-    os.environ["BUILDBOT_CONFIG_DIR"] = args.config
-    os.environ["BUILDBOT_MODEL_DIR"] = os.path.join(args.config, "models")
-    os.environ["BUILDBOT_PROMPT_DIR"] = os.path.join(args.config, "prompts")
+    os.environ["GHOSTFORGE_CONFIG_DIR"] = args.config
+    os.environ["GHOSTFORGE_MODEL_DIR"] = os.path.join(args.config, "models")
+    os.environ["GHOSTFORGE_PROMPT_DIR"] = os.path.join(args.config, "prompts")
 
     if args.model:
-        os.environ["BUILDBOT_MODEL_PATH"] = args.model
+        os.environ["GHOSTFORGE_MODEL_PATH"] = args.model
 
     if args.debug:
-        os.environ["BUILDBOT_DEBUG"] = "1"
+        os.environ["GHOSTFORGE_DEBUG"] = "1"
 
 def main():
-    """Main entry point for the buildbot command."""
+    """Main entry point for the ghostforge command."""
     try:
         args = parse_args()
         setup_environment(args)
 
         if args.command == "shell":
             # Start interactive shell
-            BuildBotShell().cmdloop()
+            GhostForgeShell().cmdloop()
         else:
             # Execute single command
-            shell = BuildBotShell()
+            shell = GhostForgeShell()
             cmd_method = getattr(shell, f"do_{args.command}", None)
             if cmd_method:
                 cmd_method(" ".join(args.args))
@@ -78,9 +78,9 @@ def main():
         sys.exit(1)
     except Exception as e:
         print(f"Error: {e}")
-        if os.getenv("BUILDBOT_DEBUG"):
+        if os.getenv("GHOSTFORGE_DEBUG"):
             raise
         sys.exit(1)
 
 if __name__ == "__main__":
-    main() 
+    main()

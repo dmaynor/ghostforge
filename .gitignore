@@ -35,8 +35,8 @@ ENV/
 *.swo
 .DS_Store
 
-# BuildBot specific
-.buildbot/
+# GhostForge specific
+.ghostforge/
 models/
 *.gguf
 index.db

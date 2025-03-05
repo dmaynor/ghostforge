@@ -1,4 +1,4 @@
-"""Remote Docker host support for BuildBot."""
+"""Remote Docker host support for GhostForge."""
 
 import os
 import json
@@ -34,7 +34,7 @@ class DockerRemoteManager:
                     )
                 self.hosts[host] = client
             except Exception as e:
-                print(f"[BuildBot]: Failed to connect to Docker host {host}: {e}")
+                print(f"[GhostForge]: Failed to connect to Docker host {host}: {e}")
 
     def _create_ssh_client(self, config: Dict[str, Any]) -> docker.DockerClient:
         """Create Docker client over SSH."""

@@ -1,4 +1,4 @@
-"""BuildBot shell commands."""
+"""GhostForge shell commands."""
 
 import os
 import sys
@@ -16,11 +16,11 @@ from jinja2 import Template
 from .utils import load_prompt
 
 # Load environment variables with defaults
-PROMPT_DIR = os.getenv("BUILDBOT_PROMPT_DIR", os.path.expanduser("~/.buildbot/prompts"))
-CONFIG_DIR = os.getenv("BUILDBOT_CONFIG_DIR", os.path.expanduser("~/.buildbot"))
+PROMPT_DIR = os.getenv("GHOSTFORGE_PROMPT_DIR", os.path.expanduser("~/.ghostforge/prompts"))
+CONFIG_DIR = os.getenv("GHOSTFORGE_CONFIG_DIR", os.path.expanduser("~/.ghostforge"))
 
 def do_exit(self, arg):
-    """Exit the BuildBot shell."""
+    """Exit the GhostForge shell."""
     print("Goodbye!")
     return True
 
@@ -30,7 +30,7 @@ def do_index(self, arg):
     """
     path = arg.strip() if arg else "."
     if not os.path.exists(path):
-        print(f"[BuildBot]: Path '{path}' does not exist.")
+        print(f"[GhostForge]: Path '{path}' does not exist.")
         return
 
     cursor = self.db_conn.cursor()
@@ -57,17 +57,17 @@ def do_index(self, arg):
                 )
             except Exception as e:
                 # More graceful error handling
-                print(f"[BuildBot]: {file_path} will not be indexed.")
+                print(f"[GhostForge]: {file_path} will not be indexed.")
     
     self.db_conn.commit()
-    print("[BuildBot]: Indexing complete.")
+    print("[GhostForge]: Indexing complete.")
 
 def do_search(self, arg):
     """Search indexed files.
     Usage: search <query>
     """
     if not arg:
-        print("[BuildBot]: Please provide a search query.")
+        print("[GhostForge]: Please provide a search query.")
         return
 
     cursor = self.db_conn.cursor()
@@ -78,10 +78,10 @@ def do_search(self, arg):
     results = cursor.fetchall()
 
     if not results:
-        print("[BuildBot]: No matches found.")
+        print("[GhostForge]: No matches found.")
         return
 
-    print(f"[BuildBot]: Found {len(results)} matches:")
+    print(f"[GhostForge]: Found {len(results)} matches:")
     for path, content in results:
         lines = content.split("\n")
         for i, line in enumerate(lines, 1):
@@ -95,14 +95,14 @@ def do_analyze(self, arg):
     """
     args = shlex.split(arg)
     if not args:
-        print("[BuildBot]: Please provide a path to analyze.")
+        print("[GhostForge]: Please provide a path to analyze.")
         return
 
     path = args[0]
     prompt_name = args[1] if len(args) > 1 else "default_analysis"
 
     if not os.path.exists(path):
-        print(f"[BuildBot]: Path '{path}' does not exist.")
+        print(f"[GhostForge]: Path '{path}' does not exist.")
         return
 
     # Load the analysis prompt
@@ -118,7 +118,7 @@ def do_analyze(self, arg):
         else:
             content = subprocess.check_output(["tree", path]).decode()
     except Exception as e:
-        print(f"[BuildBot]: Error reading '{path}': {e}")
+        print(f"[GhostForge]: Error reading '{path}': {e}")
         return
 
     # Generate analysis
@@ -129,17 +129,17 @@ def do_analyze(self, arg):
             temperature=0.7,
             stop=["<end>"]
         )
-        print("\n[BuildBot Analysis]:")
+        print("\n[GhostForge Analysis]:")
         print(response.choices[0].text.strip())
     except Exception as e:
-        print(f"[BuildBot]: Error generating analysis: {e}")
+        print(f"[GhostForge]: Error generating analysis: {e}")
 
 def do_prompt(self, arg):
     """Create or edit a prompt template.
     Usage: prompt <name>
     """
     if not arg:
-        print("[BuildBot]: Please provide a prompt name.")
+        print("[GhostForge]: Please provide a prompt name.")
         return
 
     prompt_path = os.path.join(self.config.get("prompt_dir", "prompts"), f"{arg}.yaml")
@@ -151,14 +151,14 @@ def do_prompt(self, arg):
         }
         with open(prompt_path, "w") as f:
             yaml.dump(default_prompt, f)
-        print(f"[BuildBot]: Created new prompt template '{arg}.yaml'")
+        print(f"[GhostForge]: Created new prompt template '{arg}.yaml'")
     
     # Open the prompt file in the default editor
     editor = os.getenv("EDITOR", "vim")
     subprocess.run([editor, prompt_path])
 
 def do_config(self, arg):
-    """View or edit BuildBot configuration.
+    """View or edit GhostForge configuration.
     Usage: config [edit]
     """
     config_path = os.path.join(CONFIG_DIR, "config.yaml")
@@ -167,11 +167,11 @@ def do_config(self, arg):
         if not os.path.exists(config_path):
             default_config = {
                 "model": {
-                    "path": os.path.expanduser("~/.buildbot/models/model.gguf"),
+                    "path": os.path.expanduser("~/.ghostforge/models/model.gguf"),
                     "context_size": 2048,
                     "gpu_layers": 0
                 },
-                "prompt_dir": os.path.expanduser("~/.buildbot/prompts"),
+                "prompt_dir": os.path.expanduser("~/.ghostforge/prompts"),
                 "history_size": 1000
             }
             with open(config_path, "w") as f:
@@ -184,7 +184,7 @@ def do_config(self, arg):
             with open(config_path, "r") as f:
                 print(yaml.dump(yaml.safe_load(f)))
         else:
-            print("[BuildBot]: No configuration file found. Use 'config edit' to create one.")
+            print("[GhostForge]: No configuration file found. Use 'config edit' to create one.")
 
 def do_docker(self, arg):
     """Analyze Docker containers and images.
@@ -192,7 +192,7 @@ def do_docker(self, arg):
     """
     args = shlex.split(arg)
     if not args:
-        print("[BuildBot]: Please specify 'container' or 'image'.")
+        print("[GhostForge]: Please specify 'container' or 'image'.")
         return
 
     command = args[0]
@@ -212,7 +212,7 @@ def do_docker(self, arg):
             else:
                 content = subprocess.check_output(["docker", "images"]).decode()
         else:
-            print("[BuildBot]: Invalid command. Use 'container' or 'image'.")
+            print("[GhostForge]: Invalid command. Use 'container' or 'image'.")
             return
 
         prompt_text = load_prompt("docker_analysis", {"type": command, "target": target})
@@ -223,12 +223,12 @@ def do_docker(self, arg):
                 temperature=0.7,
                 stop=["<end>"]
             )
-            print("\n[BuildBot Analysis]:")
+            print("\n[GhostForge Analysis]:")
             print(response.choices[0].text.strip())
     except subprocess.CalledProcessError as e:
-        print(f"[BuildBot]: Docker command failed: {e}")
+        print(f"[GhostForge]: Docker command failed: {e}")
     except Exception as e:
-        print(f"[BuildBot]: Error: {e}")
+        print(f"[GhostForge]: Error: {e}")
 
 def do_history(self, arg):
     """View command history.
@@ -238,7 +238,7 @@ def do_history(self, arg):
         export_path = os.path.join(CONFIG_DIR, f"history_export_{int(time.time())}.json")
         with open(export_path, "w") as f:
             json.dump(self.history, f, indent=2)
-        print(f"[BuildBot]: History exported to {export_path}")
+        print(f"[GhostForge]: History exported to {export_path}")
     else:
         for i, entry in enumerate(self.history, 1):
             print(f"{i:4d}  {entry['timestamp']}  {entry['command']}")
@@ -249,7 +249,7 @@ def do_watch(self, arg):
     """
     args = shlex.split(arg)
     if len(args) < 2:
-        print("[BuildBot]: Please specify what to watch and the target.")
+        print("[GhostForge]: Please specify what to watch and the target.")
         return
 
     watch_type = args[0]
@@ -257,7 +257,7 @@ def do_watch(self, arg):
     watch_id = f"{watch_type}:{target}"
 
     if watch_id in self.watch_threads:
-        print(f"[BuildBot]: Already watching {watch_type} '{target}'")
+        print(f"[GhostForge]: Already watching {watch_type} '{target}'")
         return
 
     def watch_file(path):
@@ -267,7 +267,7 @@ def do_watch(self, arg):
             try:
                 current_modified = os.path.getmtime(path)
                 if current_modified != last_modified:
-                    print(f"\n[BuildBot]: File '{path}' changed.")
+                    print(f"\n[GhostForge]: File '{path}' changed.")
                     with open(path, "r") as f:
                         content = f.read()
                     prompt_text = load_prompt("file_change", {"path": path})
@@ -280,7 +280,7 @@ def do_watch(self, arg):
                         print(response.choices[0].text.strip())
                     last_modified = current_modified
             except Exception as e:
-                print(f"[BuildBot]: Error watching file: {e}")
+                print(f"[GhostForge]: Error watching file: {e}")
                 break
 
     def watch_command(cmd):
@@ -294,34 +294,34 @@ def do_watch(self, arg):
                         max_tokens=500,
                         temperature=0.7
                     )
-                    print(f"\n[BuildBot]: Command '{cmd}' output analysis:")
+                    print(f"\n[GhostForge]: Command '{cmd}' output analysis:")
                     print(response.choices[0].text.strip())
                 time.sleep(5)
             except Exception as e:
-                print(f"[BuildBot]: Error watching command: {e}")
+                print(f"[GhostForge]: Error watching command: {e}")
                 break
 
     if watch_type == "file":
         if not os.path.exists(target):
-            print(f"[BuildBot]: File '{target}' does not exist.")
+            print(f"[GhostForge]: File '{target}' does not exist.")
             return
         thread = threading.Thread(target=watch_file, args=(target,), daemon=True)
     elif watch_type == "command":
         thread = threading.Thread(target=watch_command, args=(target,), daemon=True)
     else:
-        print("[BuildBot]: Invalid watch type. Use 'file' or 'command'.")
+        print("[GhostForge]: Invalid watch type. Use 'file' or 'command'.")
         return
 
     thread.start()
     self.watch_threads[watch_id] = thread
-    print(f"[BuildBot]: Started watching {watch_type} '{target}'")
+    print(f"[GhostForge]: Started watching {watch_type} '{target}'")
 
 def do_unwatch(self, arg):
     """Stop watching a file or command.
     Usage: unwatch <file|command> <target>
     """
     if not arg:
-        print("[BuildBot]: Please specify what to unwatch.")
+        print("[GhostForge]: Please specify what to unwatch.")
         return
 
     args = shlex.split(arg)
@@ -332,17 +332,17 @@ def do_unwatch(self, arg):
     if watch_id in self.watch_threads:
         # Thread will terminate on next iteration
         del self.watch_threads[watch_id]
-        print(f"[BuildBot]: Stopped watching {watch_type} '{target}'")
+        print(f"[GhostForge]: Stopped watching {watch_type} '{target}'")
     else:
-        print(f"[BuildBot]: Not watching {watch_type} '{target}'")
+        print(f"[GhostForge]: Not watching {watch_type} '{target}'")
 
 def do_watches(self, _):
     """List active watches."""
     if not self.watch_threads:
-        print("[BuildBot]: No active watches.")
+        print("[GhostForge]: No active watches.")
         return
 
-    print("[BuildBot]: Active watches:")
+    print("[GhostForge]: Active watches:")
     for watch_id in self.watch_threads:
         watch_type, target = watch_id.split(":", 1)
         print(f"  {watch_type}: {target}")
@@ -370,18 +370,18 @@ def do_help(self, arg):
         # Show help about specific command
         try:
             func = getattr(self, 'do_' + arg)
-            print(f"\n[BuildBot]: Help for command '{arg}':")
+            print(f"\n[GhostForge]: Help for command '{arg}':")
             print(f"\n{func.__doc__}")
         except AttributeError:
-            print(f"[BuildBot]: No such command: {arg}")
+            print(f"[GhostForge]: No such command: {arg}")
         return
 
     # Show general overview
     print("""
-[BuildBot] - AI-powered DevOps Troubleshooting Assistant
+[GhostForge] - AI-powered DevOps Troubleshooting Assistant
 =====================================================
 
-BuildBot helps you analyze and troubleshoot your development environment, providing
+GhostForge helps you analyze and troubleshoot your development environment, providing
 AI-powered insights for various aspects of your project.
 
 Getting Started:
@@ -434,12 +434,12 @@ Examples:
 
 Environment:
 -----------
-- Config Directory: ~/.buildbot/
-- Models Directory: ~/.buildbot/models/
-- Prompts Directory: ~/.buildbot/prompts/
-- Database: ~/.buildbot/index.db
+- Config Directory: ~/.ghostforge/
+- Models Directory: ~/.ghostforge/models/
+- Prompts Directory: ~/.ghostforge/prompts/
+- Database: ~/.ghostforge/index.db
 
-For more information, visit: https://github.com/dmaynor/buildbot
+For more information, visit: https://github.com/dmaynor/ghostforge
 """)
 
 def do_model(self, arg):
@@ -447,18 +447,18 @@ def do_model(self, arg):
     Usage: model [list|download|switch|info]
     """
     if not arg:
-        print("[BuildBot]: Please specify a subcommand: list, download, switch, or info")
+        print("[GhostForge]: Please specify a subcommand: list, download, switch, or info")
         return
 
     args = shlex.split(arg)
     command = args[0]
 
     if command == "list":
-        model_dir = os.path.expanduser("~/.buildbot/models")
+        model_dir = os.path.expanduser("~/.ghostforge/models")
         if not os.path.exists(model_dir):
-            print("[BuildBot]: No models found.")
+            print("[GhostForge]: No models found.")
             return
-        print("[BuildBot]: Available models:")
+        print("[GhostForge]: Available models:")
         for model in os.listdir(model_dir):
             if model.endswith(".gguf"):
                 size = os.path.getsize(os.path.join(model_dir, model)) / (1024 * 1024)
@@ -466,15 +466,15 @@ def do_model(self, arg):
 
     elif command == "download":
         if len(args) < 2:
-            print("[BuildBot]: Please provide a model URL")
+            print("[GhostForge]: Please provide a model URL")
             return
         url = args[1]
-        model_dir = os.path.expanduser("~/.buildbot/models")
+        model_dir = os.path.expanduser("~/.ghostforge/models")
         os.makedirs(model_dir, exist_ok=True)
         model_name = url.split("/")[-1]
         model_path = os.path.join(model_dir, model_name)
 
-        print(f"[BuildBot]: Downloading model from {url}")
+        print(f"[GhostForge]: Downloading model from {url}")
         try:
             response = requests.get(url, stream=True)
             total_size = int(response.headers.get("content-length", 0))
@@ -482,20 +482,20 @@ def do_model(self, arg):
             with open(model_path, "wb") as f:
                 for data in response.iter_content(block_size):
                     f.write(data)
-            print(f"[BuildBot]: Model downloaded to {model_path}")
+            print(f"[GhostForge]: Model downloaded to {model_path}")
         except Exception as e:
-            print(f"[BuildBot]: Error downloading model: {e}")
+            print(f"[GhostForge]: Error downloading model: {e}")
 
     elif command == "switch":
         if len(args) < 2:
-            print("[BuildBot]: Please provide a model name")
+            print("[GhostForge]: Please provide a model name")
             return
         model_name = args[1]
-        model_dir = os.path.expanduser("~/.buildbot/models")
+        model_dir = os.path.expanduser("~/.ghostforge/models")
         model_path = os.path.join(model_dir, model_name)
 
         if not os.path.exists(model_path):
-            print(f"[BuildBot]: Model '{model_name}' not found")
+            print(f"[GhostForge]: Model '{model_name}' not found")
             return
 
         config_path = os.path.join(CONFIG_DIR, "config.yaml")
@@ -505,15 +505,15 @@ def do_model(self, arg):
             config.setdefault("model", {})["path"] = model_path
             with open(config_path, "w") as f:
                 yaml.dump(config, f)
-            print(f"[BuildBot]: Switched to model '{model_name}'")
-            print("[BuildBot]: Please restart the shell to apply changes")
+            print(f"[GhostForge]: Switched to model '{model_name}'")
+            print("[GhostForge]: Please restart the shell to apply changes")
         except Exception as e:
-            print(f"[BuildBot]: Error switching model: {e}")
+            print(f"[GhostForge]: Error switching model: {e}")
 
     elif command == "info":
         model_config = self.config.get("model", {})
         current_model = model_config.get("path", "Not set")
-        print("\n[BuildBot]: Current model configuration:")
+        print("\n[GhostForge]: Current model configuration:")
         print(f"  Path: {current_model}")
         print(f"  Context size: {model_config.get('context_size', 2048)}")
         print(f"  GPU layers: {model_config.get('gpu_layers', 0)}")
@@ -521,7 +521,7 @@ def do_model(self, arg):
         print(f"  F16 KV: {model_config.get('f16_kv', True)}")
 
     else:
-        print("[BuildBot]: Invalid subcommand. Use list, download, switch, or info")
+        print("[GhostForge]: Invalid subcommand. Use list, download, switch, or info")
 
 def do_prompts(self, arg):
     """List or view available prompt templates.
@@ -536,12 +536,12 @@ def do_prompts(self, arg):
 
     if action == "list":
         if not os.path.exists(PROMPT_DIR):
-            print("[BuildBot]: No prompts directory found.")
+            print("[GhostForge]: No prompts directory found.")
             return
 
         prompts = [f[:-5] for f in os.listdir(PROMPT_DIR) if f.endswith('.yaml')]
         if not prompts:
-            print("[BuildBot]: No prompt templates found.")
+            print("[GhostForge]: No prompt templates found.")
             return
 
         # Dynamically discover categories based on prompt names and content
@@ -589,7 +589,7 @@ def do_prompts(self, arg):
                 print(f"  {prompt:<20} [Error reading template: {str(e)}]")
 
         # Display prompts by category
-        print("\n[BuildBot]: Available Prompt Templates:")
+        print("\n[GhostForge]: Available Prompt Templates:")
         for category in sorted(categories.keys()):
             print(f"\n{category}:")
             for prompt in sorted(categories[category], key=lambda x: x['name']):
@@ -608,32 +608,32 @@ def do_prompts(self, arg):
         template_path = os.path.join(PROMPT_DIR, f"{template_name}.yaml")
         
         if not os.path.exists(template_path):
-            print(f"[BuildBot]: Prompt template '{template_name}' not found.")
+            print(f"[GhostForge]: Prompt template '{template_name}' not found.")
             return
 
         try:
             with open(template_path, 'r') as f:
                 content = yaml.safe_load(f)
                 desc = content.get('description', '[No description available]')
-                print(f"\n[BuildBot]: {template_name} - {desc}")
+                print(f"\n[GhostForge]: {template_name} - {desc}")
                 print("\nTemplate Content:")
                 print(yaml.dump(content))
         except Exception as e:
-            print(f"[BuildBot]: Error reading template: {e}")
+            print(f"[GhostForge]: Error reading template: {e}")
 
     elif action == "info" and len(args) > 1:
         template_name = args[1]
         template_path = os.path.join(PROMPT_DIR, f"{template_name}.yaml")
         
         if not os.path.exists(template_path):
-            print(f"[BuildBot]: Prompt template '{template_name}' not found.")
+            print(f"[GhostForge]: Prompt template '{template_name}' not found.")
             return
 
         try:
             with open(template_path, 'r') as f:
                 content = yaml.safe_load(f)
             
-            print(f"\n[BuildBot]: {template_name}")
+            print(f"\n[GhostForge]: {template_name}")
             print("\nDescription:")
             desc = content.get('description', '[No description available]')
             # Format the description to wrap at 80 characters
@@ -659,10 +659,10 @@ def do_prompts(self, arg):
                     print(f"- {var}")
             
         except Exception as e:
-            print(f"[BuildBot]: Error reading template: {e}")
+            print(f"[GhostForge]: Error reading template: {e}")
 
     else:
-        print("[BuildBot]: Invalid action. Use 'list', 'view <name>', or 'info <name>'")
+        print("[GhostForge]: Invalid action. Use 'list', 'view <name>', or 'info <name>'")
 
 def load_recipes():
     """Load all recipe files for project detection."""
@@ -684,7 +684,7 @@ def load_recipes():
             with open(os.path.join(recipe_dir, recipe_file), 'r') as f:
                 recipes[recipe_file[:-5]] = yaml.safe_load(f)
         except Exception as e:
-            print(f"[BuildBot]: Warning - Could not load recipe file {recipe_file}: {e}")
+            print(f"[GhostForge]: Warning - Could not load recipe file {recipe_file}: {e}")
     
     return recipes
 
@@ -705,10 +705,10 @@ def do_detect(self, arg):
     """
     path = arg.strip() if arg else "."
     if not os.path.exists(path):
-        print(f"[BuildBot]: Path '{path}' does not exist.")
+        print(f"[GhostForge]: Path '{path}' does not exist.")
         return
 
-    print(f"\n[BuildBot]: Analyzing project in {os.path.abspath(path)}...")
+    print(f"\n[GhostForge]: Analyzing project in {os.path.abspath(path)}...")
 
     # Load recipes
     recipes = load_recipes()
@@ -783,7 +783,7 @@ def do_detect(self, arg):
                                             for dep in data.get(field, {}):
                                                 findings["dependencies"].add(f"Node.js: {dep}")
                             except Exception as e:
-                                print(f"[BuildBot]: Warning - Could not parse dependencies in {file_path}: {e}")
+                                print(f"[GhostForge]: Warning - Could not parse dependencies in {file_path}: {e}")
 
             # Special checks for Docker and Kubernetes
             if file == "Dockerfile" or file.endswith(".dockerfile"):
@@ -798,7 +798,7 @@ def do_detect(self, arg):
                     pass
 
     # Print findings
-    print("\n[BuildBot]: Project Analysis Results")
+    print("\n[GhostForge]: Project Analysis Results")
     
     # Languages by category
     if findings["languages"]:
