@@ -14,6 +14,9 @@ import shlex
 import datetime
 from jinja2 import Template
 from .utils import load_prompt
+from pathlib import Path
+from .tinyfs.shell_integration import TinyFSCommands
+import logging
 
 # Load environment variables with defaults
 MODEL_URL = os.getenv("GHOSTFORGE_MODEL_URL", "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-GGUF/resolve/main/tinyllama-1.1b-chat.Q4_K_M.gguf")
@@ -54,12 +57,13 @@ def load_prompt(prompt_name, context={}):
         print(f"[GhostForge]: Prompt file '{prompt_name}.yaml' not found.")
         return None
 
-class GhostForgeShell(cmd.Cmd):
+class GhostForgeShell(cmd.Cmd, TinyFSCommands):
     """Interactive REPL for GhostForge."""
-    intro = "GhostForge REPL v1.0\nType 'help' for commands, or press TAB to list all commands."
-    prompt = "> "
+    intro = "Welcome to GhostForge Shell. Type help or ? to list commands.\n"
+    prompt = "ghostforge> "
     history = []  # Stores past commands
     watch_threads = {}  # Stores active watch threads
+    logger = None
 
     # Command categories for better organization
     COMMAND_CATEGORIES = {
@@ -72,11 +76,14 @@ class GhostForgeShell(cmd.Cmd):
     }
 
     def __init__(self):
+        """Initialize the shell."""
         print("[DEBUG]: Initializing GhostForgeShell")
         super().__init__()
+        TinyFSCommands.__init__(self)
         self.config = self.load_config()
         self.model = self.load_model()
         self.db_conn = self.init_database()
+        self.logger = logging.getLogger("ghostforge.shell")
 
     def preloop(self):
         """Setup before the command loop starts."""
@@ -305,4 +312,46 @@ class GhostForgeShell(cmd.Cmd):
         do_exit, do_index, do_search, do_analyze, do_prompt,
         do_config, do_docker, do_history, do_watch, do_unwatch,
         do_watches, do_help, do_model, do_prompts
-    ) 
+    )
+
+    def write(self, message):
+        """Write a message to the output."""
+        print(message)
+    
+    def error(self, message):
+        """Write an error message to the output."""
+        print(f"Error: {message}")
+    
+    def do_quit(self, arg):
+        """Exit the GhostForge shell."""
+        print("Goodbye!")
+        return True
+    
+    def do_hello(self, arg):
+        """Say hello to GhostForge."""
+        print("Hello from GhostForge!")
+
+def main():
+    """Run the GhostForge shell."""
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    
+    # Create and run the shell
+    shell = GhostForgeShell()
+    try:
+        shell.cmdloop()
+    except KeyboardInterrupt:
+        print("\nGoodbye!")
+        return 0
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        logging.error(f"Shell error: {e}", exc_info=True)
+        return 1
+    
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main()) 
