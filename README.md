@@ -13,6 +13,7 @@ An AI-powered troubleshooting assistant for DevOps that integrates with TinyLlam
 - Custom prompt templates
 - Export functionality
 - Remote Docker host support
+- **New:** Secure filesystem operations for LLMs via TinyFS
 
 ## Installation
 
@@ -28,6 +29,18 @@ cd ghostforge
 pip install -e .
 ```
 
+### Automatic Environment Setup
+
+GhostForge now includes a setup script that configures your environment and downloads the required model:
+
+```bash
+# Set up the virtual environment and direnv for automatic activation
+./setup_venv.sh
+
+# Download the TinyLlama model
+python tinyfs_auto_download_simple.py
+```
+
 ## Quick Start
 
 1. Start the GhostForge shell:
@@ -37,17 +50,23 @@ ghostforge
 
 2. Index your project files:
 ```bash
-> index
+ghostforge> index
 ```
 
 3. Analyze files:
 ```bash
-> analyze logs/error.log
+ghostforge> analyze logs/error.log
 ```
 
 4. Search indexed files:
 ```bash
-> search error --type=log
+ghostforge> search error --type=log
+```
+
+5. Use the new TinyFS file operations:
+```bash
+ghostforge> fs list
+ghostforge> fs read config.json
 ```
 
 ## Configuration
@@ -86,21 +105,93 @@ docker_hosts:
 
 ## Commands
 
-- `help`: Display help information and available commands
-- `index`: Index project files for troubleshooting
-- `search`: Search indexed files using keywords
-- `analyze`: Analyze files using TinyLlama
-- `prompt`: Manage YAML prompt templates
-- `prompts`: List or view available prompt templates
-- `config`: View or modify GhostForge configuration
-- `docker`: Docker-specific analysis and troubleshooting
-- `history`: View or search command history
-- `watch`: Watch files or command output in real-time
-- `unwatch`: Stop watching a file or command
+Below is a comprehensive list of commands available in the GhostForge shell:
+
+### File Operations
+- `index [directory]`: Index project files for searching and analysis
+- `search <query> [--type=filetype]`: Search indexed files using keywords
+- `analyze <file> [--prompt=template]`: Analyze files using TinyLlama
+
+### TinyFS Commands
+- `fs read <path>`: Read and display the contents of a file
+- `fs write <path> <content>`: Write content to a file
+- `fs list [path]`: List contents of a directory (defaults to current directory)
+- `fs mkdir <path>`: Create a new directory
+- `fs delete <path>`: Delete a file
+- `fs copy <source> <destination>`: Copy a file to a new location
+- `fs move <source> <destination>`: Move a file to a new location
+- `fs exists <path>`: Check if a file or directory exists
+- `fs info <path>`: Display information about a file or directory
+
+### Docker Commands
+- `docker list-images`: List available Docker images
+- `docker list-containers`: List running Docker containers
+- `docker analyze-image <image>`: Analyze a Docker image
+- `docker analyze-container <container>`: Analyze a running container
+- `docker analyze-dockerfile <path>`: Analyze a Dockerfile
+
+### Kubernetes Commands
+- `kubernetes analyze-manifests <directory>`: Analyze Kubernetes manifest files
+- `kubernetes analyze-cluster`: Analyze the current Kubernetes cluster
+- `kubernetes list-resources`: List resources in the current cluster
+
+### CI/CD Commands
+- `cicd analyze <directory>`: Analyze CI/CD configuration files
+
+### Monitoring Commands
+- `watch <file|command>`: Watch a file or command output in real-time
+- `unwatch <id>`: Stop watching a file or command
 - `watches`: List active watches
-- `model`: Manage LLM models
-- `detect`: Detect and analyze project characteristics
-- `exit`: Exit the GhostForge shell
+
+### Configuration Commands
+- `config get <key>`: View a configuration value
+- `config set <key> <value>`: Set a configuration value
+- `config list`: List all configuration values
+- `prompt list`: List available prompt templates
+- `prompt show <name>`: Show a specific prompt template
+- `prompt create <name>`: Create a new prompt template
+- `model info`: Show information about the current model
+- `model load <path>`: Load a different model
+
+### Shell Commands
+- `help`: Display help information and available commands
+- `history`: View or search command history
+- `exit` or `quit`: Exit the GhostForge shell
+- `hello`: Test command to verify the shell is working
+
+## Sample Help Output
+
+When you run the `help` command in the GhostForge shell, you'll see output similar to this:
+
+```
+Welcome to GhostForge Shell. Type help or ? to list commands.
+
+Documented commands (type help <topic>):
+
+File Operations:
+  analyze  index  search  fs
+
+Docker Commands:
+  docker
+
+Kubernetes Commands:
+  kubernetes  k8s
+
+CI/CD Commands:
+  cicd
+
+Watch Commands:
+  watch  unwatch  watches
+
+Configuration:
+  config  model  prompts
+
+Shell Commands:
+  help  exit  quit  hello
+
+Type help <command> for detailed information on a specific command.
+For example: help analyze
+```
 
 ## Understanding the Codebase
 
@@ -117,7 +208,7 @@ The command-line interface is powered by the Python `cmd` module, with command i
 The indexing system scans your codebase and stores content for quick retrieval:
 
 ```bash
-> index
+ghostforge> index
 ```
 
 The indexer will scan your project files and gracefully handle binary files by skipping them with a message:
@@ -177,6 +268,10 @@ pylint ghostforge
 2. **Help command exits the shell**: If you encounter this issue, make sure your installation includes the latest fixes that properly implement the command categories and prompt commands.
 
 3. **Docker/Kubernetes analysis errors**: Ensure you have the proper permissions to access container and cluster information.
+
+4. **Model loading errors**: If you encounter errors loading the model, run the `tinyfs_auto_download_simple.py` script to download the required model.
+
+5. **Environment setup issues**: Use the `setup_venv.sh` script to create a properly configured virtual environment. For automatic environment activation, install direnv and run `direnv allow` in the project directory.
 
 ## License
 

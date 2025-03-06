@@ -1,8 +1,11 @@
+# GhostForge Dependencies
+
 # Core dependencies
 PyYAML>=6.0.1
 Jinja2>=3.1.2
 requests>=2.31.0
 llama-cpp-python>=0.2.11
+tqdm>=4.66.0
 
 # Docker support
 docker>=7.0.0

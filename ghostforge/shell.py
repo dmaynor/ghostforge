@@ -17,6 +17,8 @@ from .utils import load_prompt
 from pathlib import Path
 from .tinyfs.shell_integration import TinyFSCommands
 import logging
+import tqdm
+import readline
 
 # Load environment variables with defaults
 MODEL_URL = os.getenv("GHOSTFORGE_MODEL_URL", "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-GGUF/resolve/main/tinyllama-1.1b-chat.Q4_K_M.gguf")
@@ -37,6 +39,37 @@ def check_dependency(module_name):
 
 check_dependency("llama_cpp")
 from llama_cpp import Llama
+
+def download_file(url, destination):
+    """
+    Download a file with progress bar.
+    
+    Args:
+        url: URL to download from
+        destination: Path to save the file to
+    """
+    response = requests.get(url, stream=True)
+    total_size = int(response.headers.get('content-length', 0))
+    block_size = 1024  # 1 Kibibyte
+    
+    # Create parent directory if it doesn't exist
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
+    
+    print(f"Downloading model to {destination}")
+    print(f"File size: {total_size / (1024 * 1024):.1f} MB")
+    
+    progress_bar = tqdm.tqdm(total=total_size, unit='iB', unit_scale=True)
+    with open(destination, 'wb') as file:
+        for data in response.iter_content(block_size):
+            progress_bar.update(len(data))
+            file.write(data)
+    progress_bar.close()
+    
+    if total_size != 0 and progress_bar.n != total_size:
+        print("ERROR: Failed to download the complete file")
+        return False
+    
+    return True
 
 def load_prompt(prompt_name, context={}):
     """Load and render a YAML prompt file."""
@@ -94,6 +127,13 @@ class GhostForgeShell(cmd.Cmd, TinyFSCommands):
                 self.history = json.load(f)
         except FileNotFoundError:
             self.history = []
+        # Setup readline history
+        histfile = os.path.join(CONFIG_DIR, "history")
+        try:
+            readline.read_history_file(histfile)
+            readline.set_history_length(1000)
+        except FileNotFoundError:
+            pass
 
     def precmd(self, line):
         """Pre-command hook to store history."""
@@ -125,12 +165,44 @@ class GhostForgeShell(cmd.Cmd, TinyFSCommands):
             return {}
 
     def load_model(self):
-        """Load the LLM model based on configuration."""
-        print("[DEBUG]: Loading model")
-        model_config = self.config.get("model", {})
-        model_path = model_config.get("path", MODEL_PATH)
+        """
+        Load the language model.
         
-        # Model parameters
+        If the model file doesn't exist, it offers to download it.
+        """
+        print("[DEBUG]: Loading model")
+        
+        if not importlib.util.find_spec("llama_cpp"):
+            print("[GhostForge]: Warning - llama-cpp-python not installed. Model functionality disabled.")
+            return None
+        
+        model_config = self.config.get("model", {})
+        
+        # Check if model is disabled in config
+        if model_config.get("enabled") is False:
+            print("[GhostForge]: Model loading disabled in config.")
+            return None
+            
+        # Get model path from config or use default
+        model_path = os.path.expanduser(model_config.get("path", MODEL_PATH))
+        
+        # Check if model exists
+        if not os.path.exists(model_path):
+            print(f"[GhostForge]: Model not found at {model_path}")
+            
+            # Ask if user wants to download
+            download = input("Would you like to download the model now? (~125MB) [y/N]: ").lower().strip()
+            if download in ('y', 'yes'):
+                success = download_file(MODEL_URL, model_path)
+                if not success:
+                    print("[GhostForge]: Failed to download model. Model functionality disabled.")
+                    return None
+                print("[GhostForge]: Model downloaded successfully.")
+            else:
+                print("[GhostForge]: Model download skipped. Model functionality disabled.")
+                return None
+        
+        # Extract parameters from config
         params = {
             "n_ctx": model_config.get("context_size", 2048),
             "n_threads": model_config.get("threads", None),
@@ -139,7 +211,11 @@ class GhostForgeShell(cmd.Cmd, TinyFSCommands):
             "f16_kv": model_config.get("f16_kv", True)
         }
         
-        return Llama(model_path=model_path, **params)
+        try:
+            return Llama(model_path=model_path, **params)
+        except Exception as e:
+            print(f"[GhostForge]: Error loading model: {e}")
+            return None
 
     def init_database(self):
         """Initialize the SQLite database."""
