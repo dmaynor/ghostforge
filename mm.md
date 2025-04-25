@@ -1,3 +1,5 @@
+
+```mermaid
 graph TD
     classDef root fill:#111,stroke:#000,stroke-width:2px,color:#0f0,font-weight:bold,font-size:14px
     classDef branch fill:#111,stroke:#000,stroke-width:2px,color:#0f0,font-weight:bold,font-size:14px
@@ -119,3 +121,4 @@ Evolution: Workflow integration"]
     
     %% Apply classes
     class Root,Branch1,Branch2,Branch3,B1T1,B2T1,B3T1,B1T2,B2T2,B3T2,B1T3,B2T3,B3T3,B1T1Out,B2T1Out,B3T1Out,B1T2Out,B2T2Out,B3T2Out,B1T3Out,B2T3Out,B3T3Out,Integration,Solution1,Solution2,Solution3 root
+```
